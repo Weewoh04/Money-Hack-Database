@@ -36,13 +36,22 @@ export default function SpreadsheetsPage() {
             <p className="mt-4 rounded-2xl bg-cream p-3 text-sm leading-6 text-ink/70">
               <span className="font-black text-ink">Best for:</span> {sheet.bestFor}
             </p>
-            <a
-              href={`/downloads/${sheet.fileName}`}
-              download
-              className="mt-auto inline-flex pt-5 font-black text-moss transition hover:text-ink"
-            >
-              Download spreadsheet
-            </a>
+            <div className="mt-auto flex flex-col gap-2 pt-5">
+              <a
+                href={`/downloads/${sheet.fileName}`}
+                download
+                className="inline-flex rounded-full bg-moss px-5 py-3 font-black text-white transition hover:bg-ink"
+              >
+                Download Excel workbook
+              </a>
+              <a
+                href={`/downloads/${sheet.csvFileName}`}
+                download
+                className="inline-flex rounded-full border-2 border-moss px-5 py-3 font-black text-moss transition hover:bg-leaf"
+              >
+                Download CSV for Google Sheets
+              </a>
+            </div>
           </article>
         ))}
       </div>
@@ -50,9 +59,9 @@ export default function SpreadsheetsPage() {
       <div className="mt-10 rounded-3xl border border-clay/20 bg-clay/10 p-5">
         <h2 className="text-xl font-black text-ink">Quick note before using these</h2>
         <p className="mt-2 leading-7 text-ink/75">
-          Open the file in Excel, Google Sheets, or Numbers, then save your own copy before editing. The workbooks include
-          starter rows, formulas, and sections you can customize. Always verify bills, rates, account balances, benefit
-          rules, and payoff details directly with official providers or account portals.
+          The Excel workbook includes formatting and formulas. The CSV version is the most reliable option for importing
+          into Google Sheets: open Google Sheets, choose File, Import, Upload, then select the CSV. Always verify bills,
+          rates, account balances, benefit rules, and payoff details directly with official providers or account portals.
         </p>
       </div>
     </section>

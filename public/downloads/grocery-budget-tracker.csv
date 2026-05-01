@@ -1,0 +1,7 @@
+Grocery Budget Tracker
+"Plan trips before shopping, compare planned versus actual spending, and track coupon or rebate notes."
+Week,Store,Category,Planned Items,Estimated Cost,Actual Cost,Savings,Notes
+Week 1,Example Grocery,Produce,"Bananas, lettuce, carrots",18,16,,Replace examples with your list
+Week 1,Example Grocery,Pantry,"Rice, beans, pasta",22,20,,Digital coupon
+Week 1,Example Grocery,Protein,"Eggs, chicken, tofu",35,34,,Rebate app
+Total,,,,,,,

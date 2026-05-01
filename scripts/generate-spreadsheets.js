@@ -6,7 +6,8 @@ const outputDir = path.join(process.cwd(), "public", "downloads");
 
 const templates = [
   {
-    file: "debt-payoff-planner.xlsx",
+    file: "debt-payoff-planner-v2.xlsx",
+    csv: "debt-payoff-planner.csv",
     sheet: "Debt Payoff",
     title: "Debt Payoff Planner",
     note: "Use this original planning worksheet to compare payoff order, payments, and progress. Verify balances and rates with your lenders.",
@@ -29,7 +30,8 @@ const templates = [
     totals: ["Totals", { formula: "SUM(B4:B6)" }, "", { formula: "SUM(D4:D6)" }, { formula: "SUM(E4:E6)" }, "", "", "", ""],
   },
   {
-    file: "grocery-budget-tracker.xlsx",
+    file: "grocery-budget-tracker-v2.xlsx",
+    csv: "grocery-budget-tracker.csv",
     sheet: "Grocery Budget",
     title: "Grocery Budget Tracker",
     note: "Plan trips before shopping, compare planned versus actual spending, and track coupon or rebate notes.",
@@ -51,7 +53,8 @@ const templates = [
     totals: ["Total", "", "", "", { formula: "SUM(E4:E6)" }, { formula: "SUM(F4:F6)" }, { formula: "SUM(G4:G6)" }, ""],
   },
   {
-    file: "monthly-budget-worksheet.xlsx",
+    file: "monthly-budget-worksheet-v2.xlsx",
+    csv: "monthly-budget-worksheet.csv",
     sheet: "Monthly Budget",
     title: "Monthly Budget Worksheet",
     note: "Use planned and actual columns to spot gaps before the month gets away from you.",
@@ -76,7 +79,8 @@ const templates = [
     totals: ["Leftover", { formula: "SUM(C4:C5)-SUM(C6:C11)" }, "", "", "", ""],
   },
   {
-    file: "bill-payment-tracker.xlsx",
+    file: "bill-payment-tracker-v2.xlsx",
+    csv: "bill-payment-tracker.csv",
     sheet: "Bill Tracker",
     title: "Bill Payment Tracker",
     note: "Track due dates, payment status, confirmation numbers, and notes in one place.",
@@ -100,7 +104,8 @@ const templates = [
     totals: ["Monthly Total", "", { formula: "SUM(C4:C8)" }, "", "", "", "", ""],
   },
   {
-    file: "savings-goal-planner.xlsx",
+    file: "savings-goal-planner-v2.xlsx",
+    csv: "savings-goal-planner.csv",
     sheet: "Savings Goals",
     title: "Savings Goal Planner",
     note: "Set targets, track balances, and update progress notes as you save.",
@@ -121,7 +126,8 @@ const templates = [
     totals: ["Totals", { formula: "SUM(B4:B6)" }, { formula: "SUM(C4:C6)" }, { formula: "SUM(D4:D6)" }, "", { formula: "SUM(F4:F6)" }, ""],
   },
   {
-    file: "emergency-budget-reset.xlsx",
+    file: "emergency-budget-reset-v2.xlsx",
+    csv: "emergency-budget-reset.csv",
     sheet: "Emergency Reset",
     title: "Emergency Budget Reset Worksheet",
     note: "Prioritize essentials, action steps, and provider calls during a short-term cash crunch.",
@@ -251,11 +257,33 @@ async function buildWorkbook(template) {
   await workbook.xlsx.writeFile(path.join(outputDir, template.file));
 }
 
+function csvValue(value) {
+  if (value && typeof value === "object" && "formula" in value) {
+    return "";
+  }
+
+  const text = String(value ?? "");
+  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function buildCsv(template) {
+  const rows = [
+    [template.title],
+    [template.note],
+    template.columns.map(([header]) => header),
+    ...template.rows,
+    template.totals,
+  ];
+  const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
+  fs.writeFileSync(path.join(outputDir, template.csv), csv, "utf8");
+}
+
 async function main() {
   fs.mkdirSync(outputDir, { recursive: true });
 
   for (const template of templates) {
     await buildWorkbook(template);
+    buildCsv(template);
   }
 }
 
