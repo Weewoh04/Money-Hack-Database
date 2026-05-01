@@ -11,15 +11,15 @@ const templates = [
     title: "Debt Payoff Planner",
     note: "Use this original planning worksheet to compare payoff order, payments, and progress. Verify balances and rates with your lenders.",
     columns: [
-      ["Debt Name", 24],
-      ["Balance", 14],
-      ["Interest Rate", 14],
-      ["Minimum Payment", 16],
-      ["Extra Payment", 16],
-      ["Due Date", 14],
-      ["Payoff Priority", 18],
-      ["Payoff Method", 18],
-      ["Notes", 34],
+      ["Debt Name", 24, "text"],
+      ["Balance", 14, "currency"],
+      ["Interest Rate", 14, "percentText"],
+      ["Minimum Payment", 16, "currency"],
+      ["Extra Payment", 16, "currency"],
+      ["Due Date", 14, "text"],
+      ["Payoff Priority", 18, "number"],
+      ["Payoff Method", 18, "text"],
+      ["Notes", 34, "text"],
     ],
     rows: [
       ["Credit Card 1", 1500, "24.99%", 50, 25, "15th", 1, "Avalanche", "Replace examples with your accounts"],
@@ -34,14 +34,14 @@ const templates = [
     title: "Grocery Budget Tracker",
     note: "Plan trips before shopping, compare planned versus actual spending, and track coupon or rebate notes.",
     columns: [
-      ["Week", 14],
-      ["Store", 20],
-      ["Category", 18],
-      ["Planned Items", 36],
-      ["Estimated Cost", 16],
-      ["Actual Cost", 14],
-      ["Savings", 14],
-      ["Notes", 30],
+      ["Week", 14, "text"],
+      ["Store", 20, "text"],
+      ["Category", 18, "text"],
+      ["Planned Items", 36, "text"],
+      ["Estimated Cost", 16, "currency"],
+      ["Actual Cost", 14, "currency"],
+      ["Savings", 14, "currency"],
+      ["Notes", 30, "text"],
     ],
     rows: [
       ["Week 1", "Example Grocery", "Produce", "Bananas, lettuce, carrots", 18, 16, { formula: "E4-F4" }, "Replace examples with your list"],
@@ -56,12 +56,12 @@ const templates = [
     title: "Monthly Budget Worksheet",
     note: "Use planned and actual columns to spot gaps before the month gets away from you.",
     columns: [
-      ["Category", 24],
-      ["Planned Amount", 16],
-      ["Actual Amount", 16],
-      ["Due Date", 14],
-      ["Status", 18],
-      ["Notes", 34],
+      ["Category", 24, "text"],
+      ["Planned Amount", 16, "currency"],
+      ["Actual Amount", 16, "currency"],
+      ["Due Date", 14, "text"],
+      ["Status", 18, "text"],
+      ["Notes", 34, "text"],
     ],
     rows: [
       ["Income 1", 2500, 2500, "", "Received", "Example row"],
@@ -81,14 +81,14 @@ const templates = [
     title: "Bill Payment Tracker",
     note: "Track due dates, payment status, confirmation numbers, and notes in one place.",
     columns: [
-      ["Bill", 22],
-      ["Provider", 22],
-      ["Amount Due", 14],
-      ["Due Date", 14],
-      ["Autopay", 12],
-      ["Date Paid", 14],
-      ["Confirmation #", 22],
-      ["Notes", 32],
+      ["Bill", 22, "text"],
+      ["Provider", 22, "text"],
+      ["Amount Due", 14, "currency"],
+      ["Due Date", 14, "text"],
+      ["Autopay", 12, "text"],
+      ["Date Paid", 14, "text"],
+      ["Confirmation #", 22, "text"],
+      ["Notes", 32, "text"],
     ],
     rows: [
       ["Rent or Mortgage", "Provider Name", 1200, "1st", "No", "", "", ""],
@@ -105,13 +105,13 @@ const templates = [
     title: "Savings Goal Planner",
     note: "Set targets, track balances, and update progress notes as you save.",
     columns: [
-      ["Goal", 24],
-      ["Target Amount", 16],
-      ["Starting Balance", 18],
-      ["Monthly Contribution", 22],
-      ["Target Date", 16],
-      ["Current Balance", 18],
-      ["Progress Notes", 34],
+      ["Goal", 24, "text"],
+      ["Target Amount", 16, "currency"],
+      ["Starting Balance", 18, "currency"],
+      ["Monthly Contribution", 22, "currency"],
+      ["Target Date", 16, "text"],
+      ["Current Balance", 18, "currency"],
+      ["Progress Notes", 34, "text"],
     ],
     rows: [
       ["Emergency Fund", 1000, 100, 100, "12/31/2026", 100, "Example row"],
@@ -126,15 +126,15 @@ const templates = [
     title: "Emergency Budget Reset Worksheet",
     note: "Prioritize essentials, action steps, and provider calls during a short-term cash crunch.",
     columns: [
-      ["Priority", 10],
-      ["Item", 24],
-      ["Amount Needed", 16],
-      ["Amount Available", 18],
-      ["Deadline", 14],
-      ["Action Step", 36],
-      ["Provider or Contact", 24],
-      ["Status", 16],
-      ["Notes", 34],
+      ["Priority", 10, "number"],
+      ["Item", 24, "text"],
+      ["Amount Needed", 16, "currency"],
+      ["Amount Available", 18, "currency"],
+      ["Deadline", 14, "text"],
+      ["Action Step", 36, "text"],
+      ["Provider or Contact", 24, "text"],
+      ["Status", 16, "text"],
+      ["Notes", 34, "text"],
     ],
     rows: [
       [1, "Food and groceries", 150, 75, "This week", "Check pantry and food resources", "Local pantry", "Not started", ""],
@@ -204,7 +204,7 @@ async function buildWorkbook(template) {
     alignment: { wrapText: true, vertical: "top" },
   };
 
-  sheet.columns = template.columns.map(([header, width]) => ({ header, width }));
+  sheet.columns = template.columns.map(([, width]) => ({ width }));
 
   sheet.spliceRows(1, 0, [template.title]);
   sheet.spliceRows(2, 0, [template.note]);
@@ -231,11 +231,14 @@ async function buildWorkbook(template) {
 
   sheet.eachRow((row) => {
     row.eachCell((cell) => {
-      if (typeof cell.value === "number" && cell.col > 1) {
+      const columnType = template.columns[cell.col - 1]?.[2];
+
+      if (columnType === "currency") {
         cell.numFmt = "$#,##0.00";
       }
-      if (cell.value && typeof cell.value === "object" && "formula" in cell.value) {
-        cell.numFmt = "$#,##0.00";
+
+      if (columnType === "number") {
+        cell.numFmt = "0";
       }
     });
   });
