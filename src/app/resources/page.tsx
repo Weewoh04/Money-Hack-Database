@@ -15,11 +15,11 @@ const resources = [
   },
   {
     title: "211 local assistance referrals",
-    href: "/hacks#211-local-help-line",
+    href: "/hacks/211-local-help-line",
   },
   {
     title: "Food banks and community pantries",
-    href: "/hacks#find-local-food-banks",
+    href: "/hacks/find-local-food-banks",
   },
   {
     title: "Local housing agencies and nonprofits",

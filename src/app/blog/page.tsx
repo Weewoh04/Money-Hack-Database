@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const posts = [
   {
     title: "How to Build a 7-Day Grocery Savings Plan",
-    href: "/hacks#meal-planning-savings",
+    href: "/hacks/meal-planning-savings",
   },
   {
     title: "What to Check Before Applying for Assistance",
@@ -19,11 +19,11 @@ const posts = [
   },
   {
     title: "Cashback Mistakes That Can Cost More Than They Save",
-    href: "/hacks#use-cashback-apps",
+    href: "/hacks/use-cashback-apps",
   },
   {
     title: "A Gentle No-Spend Weekend Reset",
-    href: "/hacks#no-spend-challenge",
+    href: "/hacks/no-spend-challenge",
   },
   {
     title: "Side Hustle Math: Track Net Pay, Not Gross Pay",
@@ -31,7 +31,7 @@ const posts = [
   },
   {
     title: "Free Library Perks Most People Miss",
-    href: "/hacks#use-library-perks",
+    href: "/hacks/use-library-perks",
   },
 ];
 

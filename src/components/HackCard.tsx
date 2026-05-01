@@ -45,7 +45,7 @@ export default function HackCard({ hack }: HackCardProps) {
       </div>
       <p className="mt-4 rounded-2xl bg-cream p-3 text-xs leading-5 text-ink/70">{hack.warning}</p>
       <Link
-        href={`/hacks#${hack.slug}`}
+        href={`/hacks/${hack.slug}`}
         className="mt-auto inline-flex pt-5 font-black text-moss transition hover:text-ink"
       >
         View steps
