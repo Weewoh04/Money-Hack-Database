@@ -1,5 +1,0 @@
-Debt Name,Balance,Interest Rate,Minimum Payment,Extra Payment,Due Date,Payoff Priority,Notes
-Credit Card 1,1500,24.99%,50,25,15th,1,Example row - replace with your details
-Personal Loan,3000,12.50%,120,0,1st,2,
-Student Loan,8000,5.50%,90,0,20th,3,
-Totals,=SUM(B2:B4),,=SUM(D2:D4),=SUM(E2:E4),,,

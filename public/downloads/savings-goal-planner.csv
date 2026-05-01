@@ -1,5 +1,0 @@
-Goal,Target Amount,Starting Balance,Monthly Contribution,Target Date,Current Balance,Progress Notes
-Emergency Fund,1000,100,100,12/31/2026,100,Example row - update dates and amounts
-Car Repair Fund,600,50,50,09/30/2026,50,
-Holiday Fund,500,0,40,11/30/2026,0,
-Total Goals,=SUM(B2:B4),=SUM(C2:C4),=SUM(D2:D4),,=SUM(F2:F4),
