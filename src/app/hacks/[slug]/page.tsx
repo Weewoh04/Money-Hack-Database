@@ -139,7 +139,7 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
       </div>
 
       <div className="mt-10">
-        <StateMap hackTitle={hack.title} />
+        <StateMap hackTitle={hack.title} hackSlug={hack.slug} />
       </div>
 
       <div className="mt-10">
