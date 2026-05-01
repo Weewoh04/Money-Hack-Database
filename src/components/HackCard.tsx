@@ -30,19 +30,6 @@ export default function HackCard({ hack }: HackCardProps) {
           <dd className="text-ink/70">{hack.estimatedBenefit}</dd>
         </div>
       </dl>
-      <div className="mt-4">
-        <h4 className="text-sm font-black text-ink">Steps</h4>
-        <ol className="mt-2 grid gap-2 text-sm leading-6 text-ink/70">
-          {hack.steps.map((step, index) => (
-            <li key={step} className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-leaf text-xs font-black text-moss">
-                {index + 1}
-              </span>
-              <span>{step}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
       <p className="mt-4 rounded-2xl bg-cream p-3 text-xs leading-5 text-ink/70">{hack.warning}</p>
       <Link
         href={`/hacks/${hack.slug}`}

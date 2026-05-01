@@ -1,0 +1,5 @@
+Week,Store,Category,Planned Items,Estimated Cost,Actual Cost,Coupons/Rebates Used,Savings Notes
+Week 1,Example Grocery,Produce,"bananas, lettuce, carrots",18,16,Store coupon,Replace examples with your list
+Week 1,Example Grocery,Pantry,"rice, beans, pasta",22,20,Digital coupon,
+Week 1,Example Grocery,Protein,"eggs, chicken, tofu",35,34,Rebate app,
+Week 1,Total,,,"=SUM(E2:E4)","=SUM(F2:F4)",,

@@ -102,6 +102,21 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
               eligibility, deadlines, fees, program details, and terms directly with official providers.
             </p>
           </section>
+
+          {hack.slug === "emergency-budget-reset" ? (
+            <section className="mt-8 rounded-3xl border border-moss/20 bg-leaf p-5">
+              <h2 className="text-2xl font-black text-ink">Download the emergency budget worksheet</h2>
+              <p className="mt-2 leading-7 text-ink/75">
+                Use the spreadsheet page to download the Emergency Budget Reset Worksheet and other planning templates.
+              </p>
+              <Link
+                href="/spreadsheets"
+                className="mt-4 inline-flex rounded-full bg-moss px-5 py-3 font-black text-white transition hover:bg-ink"
+              >
+                View budget spreadsheets
+              </Link>
+            </section>
+          ) : null}
         </div>
 
         <aside className="grid gap-5">
