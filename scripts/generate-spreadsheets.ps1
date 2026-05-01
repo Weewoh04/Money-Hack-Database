@@ -18,21 +18,21 @@ function Column-Name([int]$Index) {
   return $name
 }
 
-function Cell-Xml($Value, [int]$Style = 0) {
+function Cell-Xml([string]$Ref, $Value, [int]$Style = 0) {
   if ($null -eq $Value) {
-    return "<c s=`"$Style`"/>"
+    return "<c r=`"$Ref`" s=`"$Style`"/>"
   }
 
   if ($Value -is [hashtable] -and $Value.ContainsKey("formula")) {
-    return "<c s=`"$Style`"><f>$($Value.formula)</f></c>"
+    return "<c r=`"$Ref`" s=`"$Style`"><f>$($Value.formula)</f></c>"
   }
 
   if ($Value -is [int] -or $Value -is [double] -or $Value -is [decimal]) {
-    return "<c s=`"$Style`"><v>$Value</v></c>"
+    return "<c r=`"$Ref`" s=`"$Style`"><v>$Value</v></c>"
   }
 
   $text = Encode-Xml ([string]$Value)
-  return "<c t=`"inlineStr`" s=`"$Style`"><is><t>$text</t></is></c>"
+  return "<c r=`"$Ref`" t=`"inlineStr`" s=`"$Style`"><is><t>$text</t></is></c>"
 }
 
 function Sheet-Xml($Rows, $Widths) {
@@ -45,7 +45,7 @@ function Sheet-Xml($Rows, $Widths) {
     for ($c = 0; $c -lt $row.values.Count; $c++) {
       $ref = "$(Column-Name ($c + 1))$($r + 1)"
       $style = if ($row.styles.Count -gt $c) { $row.styles[$c] } else { 0 }
-      $cells.Add("<c r=`"$ref`"$(Cell-Xml $row.values[$c] $style).Substring(2)")
+      $cells.Add((Cell-Xml $ref $row.values[$c] $style))
     }
 
     $height = if ($row.ContainsKey("height")) { " ht=`"$($row.height)`" customHeight=`"1`"" } else { "" }
@@ -174,8 +174,19 @@ function Create-Xlsx($FileName, $SheetName, $Rows, $Widths) {
     Remove-Item -LiteralPath $target -Force
   }
 
+  Add-Type -AssemblyName System.IO.Compression
   Add-Type -AssemblyName System.IO.Compression.FileSystem
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($temp, $target)
+  $zip = [System.IO.Compression.ZipFile]::Open($target, [System.IO.Compression.ZipArchiveMode]::Create)
+  try {
+    $files = Get-ChildItem -LiteralPath $temp -Recurse -File
+    foreach ($file in $files) {
+      $relative = $file.FullName.Substring($temp.Length + 1).Replace("\", "/")
+      [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $file.FullName, $relative) | Out-Null
+    }
+  }
+  finally {
+    $zip.Dispose()
+  }
   Remove-Item -LiteralPath $temp -Recurse -Force
 }
 
