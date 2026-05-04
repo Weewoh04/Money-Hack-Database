@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
 import { blogPosts } from "@/data/blog";
-import { pageSeo } from "@/lib/seo";
+import { absoluteUrl, pageSeo, siteName } from "@/lib/seo";
 
 const guideDepthSections = [
   {
@@ -84,9 +84,34 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const relatedPosts = blogPosts.filter((item) => item.id !== post.id).slice(0, 3);
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    author: {
+      "@type": "Organization",
+      name: siteName,
+      url: absoluteUrl("/about"),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteName,
+      url: absoluteUrl("/"),
+    },
+    datePublished: "2026-05-04",
+    dateModified: "2026-05-04",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": absoluteUrl(`/blog/${post.slug}`),
+    },
+    url: absoluteUrl(`/blog/${post.slug}`),
+    articleSection: post.category,
+  };
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <Link className="font-black text-moss hover:text-ink" href="/blog">
         Back to all guides
       </Link>

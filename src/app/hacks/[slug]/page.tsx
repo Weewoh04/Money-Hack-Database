@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
 import StateMap from "@/components/StateMap";
 import { hacks } from "@/data/hacks";
-import { pageSeo } from "@/lib/seo";
+import { absoluteUrl, pageSeo } from "@/lib/seo";
 
 const categoryGuidance: Record<string, string[]> = {
   "Emergency Help": [
@@ -170,9 +170,26 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
   );
   const eligibilityTips = getEligibilityTips(hack.title, hack.category);
   const faqs = getFaqs(hack.title, hack.category, hack.timeToStart, hack.estimatedBenefit, hack.warning);
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: getHackKeywordTitle(hack.title, hack.category),
+    description: hack.summary,
+    url: absoluteUrl(`/hacks/${hack.slug}`),
+    totalTime: hack.timeToStart,
+    category: hack.category,
+    step: hack.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step,
+      text: step,
+      url: `${absoluteUrl(`/hacks/${hack.slug}`)}#step-${index + 1}`,
+    })),
+  };
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <Link className="font-black text-moss hover:text-ink" href="/hacks">
         Back to all money hacks
       </Link>
@@ -213,7 +230,7 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
             <p className="font-black uppercase tracking-wide text-moss">Step-by-step instructions</p>
             <div className="mt-5 grid gap-5">
               {hack.steps.map((step, index) => (
-                <section key={step} className="rounded-3xl border border-ink/10 bg-cream p-5">
+                <section id={`step-${index + 1}`} key={step} className="rounded-3xl border border-ink/10 bg-cream p-5">
                   <h2 className="text-2xl font-black text-ink">
                     Step {index + 1}: {step}
                   </h2>

@@ -4,6 +4,10 @@ export const siteName = "Money Hack Database";
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://moneyhackdatabase.com";
 export const metadataBase = new URL(siteUrl);
 
+export function absoluteUrl(path: string) {
+  return new URL(path, siteUrl).toString();
+}
+
 type PageSeoInput = {
   title: string;
   description: string;

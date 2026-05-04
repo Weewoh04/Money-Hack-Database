@@ -6,7 +6,7 @@ import HackCard from "@/components/HackCard";
 import Hero from "@/components/Hero";
 import { categories } from "@/data/categories";
 import { hacks } from "@/data/hacks";
-import { pageSeo } from "@/lib/seo";
+import { absoluteUrl, pageSeo, siteName } from "@/lib/seo";
 
 export const metadata: Metadata = pageSeo({
   title: "Money Hack Database: Save Money and Find Help Fast",
@@ -44,9 +44,21 @@ const startHere = [
 
 export default function Home() {
   const featuredHacks = hacks.slice(0, 6);
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteName,
+    url: absoluteUrl("/"),
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${absoluteUrl("/hacks")}?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       <Hero />
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
