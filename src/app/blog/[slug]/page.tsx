@@ -60,8 +60,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   return pageSeo({
-    title: post.title,
-    description: post.description,
+    title: post.seoTitle ?? post.title,
+    description: post.seoDescription ?? post.description,
     keywords: [
       post.title.toLowerCase(),
       post.category.toLowerCase(),
@@ -128,6 +128,36 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <AdSlot label="Advertisement" />
           </div>
 
+          {post.comparisonTable ? (
+            <section className="mt-8">
+              <h2 className="text-2xl font-black text-ink">Cashback app comparison table</h2>
+              <div className="mt-4 overflow-x-auto rounded-3xl border border-ink/10">
+                <table className="min-w-full border-collapse bg-white text-left text-sm">
+                  <thead className="bg-cream text-ink">
+                    <tr>
+                      {post.comparisonTable.columns.map((column) => (
+                        <th key={column} className="border-b border-ink/10 px-4 py-3 font-black">
+                          {column}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {post.comparisonTable.rows.map((row) => (
+                      <tr key={row.join("-")} className="border-b border-ink/10 last:border-b-0">
+                        {row.map((cell) => (
+                          <td key={cell} className="px-4 py-3 leading-6 text-ink/75">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+
           <div className="mt-8 space-y-8">
             {post.sections.map((section) => (
               <section key={section.heading}>
@@ -162,16 +192,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 ) : null}
               </section>
             ))}
-            {guideDepthSections.map((section) => (
-              <section key={section.heading}>
-                <h2 className="text-2xl font-black text-ink">{section.heading}</h2>
-                <div className="mt-3 space-y-4 leading-8 text-ink/75">
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              </section>
-            ))}
+            {post.hideGuideDepthSections
+              ? null
+              : guideDepthSections.map((section) => (
+                  <section key={section.heading}>
+                    <h2 className="text-2xl font-black text-ink">{section.heading}</h2>
+                    <div className="mt-3 space-y-4 leading-8 text-ink/75">
+                      {section.body.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </section>
+                ))}
           </div>
 
           {post.internalLinks ? (
