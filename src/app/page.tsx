@@ -173,28 +173,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
-        <div className="rounded-[2rem] border border-ink/10 bg-leaf p-6 sm:p-8">
-          <div className="grid gap-5 md:grid-cols-[1fr_360px] md:items-center">
-            <div>
-              <h2 className="text-3xl font-black text-ink">Get new money hacks weekly</h2>
-              <p className="mt-2 leading-7 text-ink/70">
-                Email signup placeholder for future updates, guides, and new resource roundups.
-              </p>
-            </div>
-            <form className="grid gap-3 sm:grid-cols-[1fr_auto]" action="#">
-              <input
-                aria-label="Email address"
-                placeholder="you@example.com"
-                className="min-h-12 rounded-full border border-ink/15 bg-white px-4 outline-none focus:border-moss focus:ring-4 focus:ring-white"
-              />
-              <button className="min-h-12 rounded-full bg-moss px-5 font-black text-white hover:bg-ink" type="submit">
-                Sign Up
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
