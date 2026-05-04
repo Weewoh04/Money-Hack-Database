@@ -84,11 +84,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const relatedPosts = blogPosts.filter((item) => item.id !== post.id).slice(0, 3);
+  const postUrl = absoluteUrl(`/blog/${post.slug}`);
+  const postDescription = post.seoDescription ?? post.description;
+  const postKeywords = [
+    post.title.toLowerCase(),
+    post.category.toLowerCase(),
+    "money saving guide",
+    "budget help",
+    "financial assistance",
+  ];
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${postUrl}#article`,
     headline: post.title,
-    description: post.description,
+    description: postDescription,
+    keywords: postKeywords,
+    inLanguage: "en-US",
     author: {
       "@type": "Organization",
       name: siteName,
@@ -103,9 +115,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     dateModified: "2026-05-04",
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": absoluteUrl(`/blog/${post.slug}`),
+      "@id": postUrl,
     },
-    url: absoluteUrl(`/blog/${post.slug}`),
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteName,
+      url: absoluteUrl("/"),
+    },
+    url: postUrl,
     articleSection: post.category,
   };
 
@@ -130,7 +147,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           {post.comparisonTable ? (
             <section className="mt-8">
-              <h2 className="text-2xl font-black text-ink">Cashback app comparison table</h2>
+              <h2 className="text-2xl font-black text-ink">Summary comparison table</h2>
               <div className="mt-4 overflow-x-auto rounded-3xl border border-ink/10">
                 <table className="min-w-full border-collapse bg-white text-left text-sm">
                   <thead className="bg-cream text-ink">
