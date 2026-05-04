@@ -43,7 +43,7 @@ export default function BlogPage() {
             />
             <h2 className="text-xl font-black text-ink">{post.title}</h2>
             <p className="mt-2 text-sm font-black uppercase tracking-wide text-moss">
-              {post.category} · {post.readTime}
+              {post.category} &middot; {post.readTime}
             </p>
             <p className="mt-3 leading-7 text-ink/70">{post.description}</p>
             <Link className="mt-4 inline-flex font-black text-moss hover:text-ink" href={`/blog/${post.slug}`}>

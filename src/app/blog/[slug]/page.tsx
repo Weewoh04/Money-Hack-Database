@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
 import { blogPosts } from "@/data/blog";
+import { pageSeo } from "@/lib/seo";
 
 const guideDepthSections = [
   {
@@ -58,15 +59,20 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
-  return {
+  return pageSeo({
     title: post.title,
     description: post.description,
-    openGraph: {
-      title: `${post.title} | Money Hack Database`,
-      description: post.description,
-      type: "article",
-    },
-  };
+    keywords: [
+      post.title.toLowerCase(),
+      post.category.toLowerCase(),
+      "money saving guide",
+      "budget help",
+      "financial assistance",
+      "Money Hack Database",
+    ],
+    path: `/blog/${post.slug}`,
+    type: "article",
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -115,6 +121,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     ))}
                   </ul>
                 ) : null}
+                {section.subsections ? (
+                  <div className="mt-5 space-y-5">
+                    {section.subsections.map((subsection) => (
+                      <div key={subsection.heading}>
+                        <h3 className="text-xl font-black text-ink">{subsection.heading}</h3>
+                        <div className="mt-2 space-y-3 leading-8 text-ink/75">
+                          {subsection.body.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </section>
             ))}
             {guideDepthSections.map((section) => (
@@ -128,6 +148,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </section>
             ))}
           </div>
+
+          {post.internalLinks ? (
+            <section className="mt-8 rounded-3xl border border-ink/10 bg-cream p-5">
+              <h2 className="text-2xl font-black text-ink">Related money hack pages</h2>
+              <div className="mt-4 grid gap-3">
+                {post.internalLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="rounded-2xl bg-white p-4 transition hover:bg-leaf"
+                  >
+                    <span className="font-black text-moss">{item.label}</span>
+                    <span className="mt-1 block leading-7 text-ink/70">{item.description}</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <section className="mt-8 rounded-3xl border border-clay/20 bg-clay/10 p-5">
             <h2 className="text-xl font-black text-ink">Friendly disclaimer</h2>
