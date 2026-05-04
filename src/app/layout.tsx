@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { metadataBase } from "@/lib/seo";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
+  metadataBase,
   title: {
     default: "Money Hack Database | Save Money, Find Help, Stretch Your Budget",
     template: "%s | Money Hack Database",

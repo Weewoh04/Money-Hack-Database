@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import SearchFilter from "@/components/SearchFilter";
 import { hacks } from "@/data/hacks";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Browse Money Hacks",
+export const metadata: Metadata = pageSeo({
+  title: "Browse Money Hacks for Savings and Budget Help Now",
   description:
-    "Search and filter money-saving resources, assistance programs, cashback tools, side hustle ideas, and budget help by category and difficulty.",
-};
+    "Search practical money hacks for emergency help, grocery savings, utility bills, cashback rewards, budgeting tools, and side income ideas that fit real life.",
+  keywords: [
+    "money hacks",
+    "budget help",
+    "emergency assistance",
+    "grocery savings",
+    "utility bill help",
+    "cashback rewards",
+  ],
+  path: "/hacks",
+});
 
 type HacksPageProps = {
   searchParams?: Promise<{

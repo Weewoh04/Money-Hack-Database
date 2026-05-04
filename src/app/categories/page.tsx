@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import CategoryCard from "@/components/CategoryCard";
 import { categories } from "@/data/categories";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Money Hack Categories",
+export const metadata: Metadata = pageSeo({
+  title: "Money Saving Categories for Budget Help and Deals Now",
   description:
-    "Browse emergency help, grocery savings, utility bill help, rent assistance, cashback, side hustles, budgeting tools, freebies, and discounts.",
-};
+    "Browse money-saving categories for emergency help, groceries, rent, utilities, cashback, side hustles, budgeting tools, freebies, and smart everyday deals.",
+  keywords: [
+    "money saving categories",
+    "budget categories",
+    "rent assistance",
+    "utility assistance",
+    "freebies",
+    "side hustles",
+  ],
+  path: "/categories",
+});
 
 export default function CategoriesPage() {
   return (

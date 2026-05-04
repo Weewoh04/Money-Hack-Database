@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AdSlot from "@/components/AdSlot";
 import { blogPosts } from "@/data/blog";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Money Saving Guides",
+export const metadata: Metadata = pageSeo({
+  title: "Money Saving Guides, Budget Tips, and Checklists Now",
   description:
-    "Pinterest-friendly money saving guide ideas for budgeting, groceries, emergency help, cashback, and side income planning.",
-};
+    "Read money-saving guides for groceries, emergency help, cashback mistakes, no-spend resets, side hustle math, and free resource planning ideas today too.",
+  keywords: [
+    "money saving guides",
+    "budget tips",
+    "grocery savings",
+    "no spend challenge",
+    "cashback mistakes",
+    "side hustle math",
+  ],
+  path: "/blog",
+});
 
 export default function BlogPage() {
   return (

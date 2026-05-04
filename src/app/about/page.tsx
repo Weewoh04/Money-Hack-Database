@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = pageSeo({
+  title: "About Money Hack Database and Budget Help Resources",
   description:
-    "Learn about Money Hack Database, an educational directory for money-saving resources, assistance programs, cashback tools, and budget help.",
-};
+    "Learn how Money Hack Database organizes money-saving resources, assistance programs, budgeting tools, cashback ideas, and side income tips for readers.",
+  keywords: [
+    "about Money Hack Database",
+    "budget resources",
+    "money saving resources",
+    "assistance programs",
+    "cashback ideas",
+    "side income tips",
+  ],
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -6,12 +6,22 @@ import HackCard from "@/components/HackCard";
 import Hero from "@/components/Hero";
 import { categories } from "@/data/categories";
 import { hacks } from "@/data/hacks";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Money Hack Database",
+export const metadata: Metadata = pageSeo({
+  title: "Money Hack Database: Save Money and Find Help Fast",
   description:
-    "Find practical money-saving resources, assistance programs, side hustle ideas, cashback tools, couponing strategies, and budget help.",
-};
+    "Find money-saving hacks, assistance programs, budget tools, cashback tips, side hustle ideas, and free resources to stretch your budget with less stress.",
+  keywords: [
+    "money hacks",
+    "save money",
+    "financial assistance",
+    "budget help",
+    "cashback tips",
+    "side hustle ideas",
+  ],
+  path: "/",
+});
 
 const startHere = [
   {

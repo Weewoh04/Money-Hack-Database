@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import { spreadsheets } from "@/data/spreadsheets";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Budget Spreadsheets",
+export const metadata: Metadata = pageSeo({
+  title: "Free Budget Spreadsheets for Bills, Debt, and Savings",
   description:
-    "Download free Excel-compatible budget spreadsheets for debt payoff, grocery budgeting, monthly budgets, bill tracking, savings goals, and emergency budget resets.",
-};
+    "Download free budget spreadsheets for monthly planning, debt payoff, grocery tracking, bill payments, savings goals, and emergency budget resets today.",
+  keywords: [
+    "budget spreadsheets",
+    "free Excel budget template",
+    "debt payoff planner",
+    "bill tracker",
+    "grocery budget tracker",
+    "savings goal planner",
+  ],
+  path: "/spreadsheets",
+});
 
 export default function SpreadsheetsPage() {
   return (

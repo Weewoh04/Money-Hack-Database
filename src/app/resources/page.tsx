@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AdSlot from "@/components/AdSlot";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Financial Assistance Resources",
+export const metadata: Metadata = pageSeo({
+  title: "Financial Assistance Resources and Benefit Help Today",
   description:
-    "Helpful starting points for finding official benefits, food support, utility help, housing resources, and consumer protection information.",
-};
+    "Find official starting points for benefits, food banks, utility help, housing resources, consumer protection, and local assistance programs near you now.",
+  keywords: [
+    "financial assistance resources",
+    "benefit help",
+    "food banks",
+    "utility help",
+    "housing resources",
+    "local assistance",
+  ],
+  path: "/resources",
+});
 
 const resources = [
   {

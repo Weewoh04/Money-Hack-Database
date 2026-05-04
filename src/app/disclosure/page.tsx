@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Disclosure",
+export const metadata: Metadata = pageSeo({
+  title: "Money Hack Database Disclosure and Affiliate Terms",
   description:
-    "Read the educational disclaimer and affiliate disclosure for Money Hack Database.",
-};
+    "Read Money Hack Database disclosures for educational content, affiliate links, advertising, third-party tools, downloads, and reader responsibility details.",
+  keywords: [
+    "Money Hack Database disclosure",
+    "affiliate disclosure",
+    "educational disclaimer",
+    "advertising disclosure",
+    "third-party links",
+    "reader responsibility",
+  ],
+  path: "/disclosure",
+});
 
 export default function DisclosurePage() {
   return (
