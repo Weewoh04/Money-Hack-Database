@@ -4,6 +4,38 @@ import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
 import { blogPosts } from "@/data/blog";
 
+const guideDepthSections = [
+  {
+    heading: "How to turn this guide into an action plan",
+    body: [
+      "Start by choosing one outcome for the next week. A guide is easier to use when it becomes a short action plan instead of a long list of good intentions. Write down the specific number, bill, purchase, application, or decision you want to improve. Then pick the smallest step that moves the situation forward today.",
+      "Keep the plan visible. A note on your phone, a printed checklist, or a spreadsheet can all work as long as you can update it quickly. The point is not to create a perfect system. The point is to make the next decision easier when you are busy, tired, or dealing with competing priorities.",
+      "After you take the first step, record what happened. Did you save money, avoid a purchase, find a program, learn a rule, or realize the option was not worth it? That feedback is useful because it keeps the guide connected to your real budget instead of becoming another article you read and forget.",
+    ],
+  },
+  {
+    heading: "What to verify before relying on any money tip",
+    body: [
+      "Money-saving advice can become outdated quickly. Prices change, programs pause, funding runs out, apps update terms, and local resources may have different rules from one county to the next. Before you apply, buy, cancel, switch, or share personal information, confirm the details through the official provider or account portal.",
+      "Look for dates, eligibility rules, fees, deadlines, payout requirements, cancellation rules, and documentation requirements. If the source is unclear, search for the official agency, company, nonprofit, utility provider, library, or city page instead of relying on a reposted summary. A few minutes of verification can prevent wasted time and protect you from avoidable fees or scams.",
+    ],
+  },
+  {
+    heading: "How to measure whether it worked",
+    body: [
+      "A practical money guide should leave you with evidence. That evidence might be a lower bill, a completed application, a meal plan that prevented takeout, a rebate that actually paid out, or a side hustle test that showed your real hourly rate. Use simple numbers whenever possible: dollars saved, dollars earned after expenses, hours spent, due dates avoided, or calls completed.",
+      "If the result is not clear yet, schedule a follow-up date. Some decisions need a week or a full billing cycle before the value shows up. When the follow-up arrives, compare the result with the time and effort it took. Keep what works, adjust what almost worked, and drop anything that creates stress without producing a meaningful benefit.",
+    ],
+  },
+  {
+    heading: "When to revisit the plan",
+    body: [
+      "Revisit the plan whenever a bill changes, income changes, prices rise, a program deadline appears, or a new household need shows up. Money decisions are rarely one-and-done. A tip that was not worth your time last month may become useful after a move, job change, benefit notice, school schedule change, or price increase.",
+      "It also helps to keep a short list of questions you still need answered. Who controls the rule? What is the deadline? What documents are required? What is the real cost after fees, taxes, time, or transportation? Those questions keep the guide practical and help you avoid relying on assumptions when current details matter.",
+    ],
+  },
+];
+
 type BlogPostPageProps = {
   params: Promise<{
     slug: string;
@@ -83,6 +115,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     ))}
                   </ul>
                 ) : null}
+              </section>
+            ))}
+            {guideDepthSections.map((section) => (
+              <section key={section.heading}>
+                <h2 className="text-2xl font-black text-ink">{section.heading}</h2>
+                <div className="mt-3 space-y-4 leading-8 text-ink/75">
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
               </section>
             ))}
           </div>
