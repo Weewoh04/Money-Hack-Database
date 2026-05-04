@@ -3,7 +3,7 @@ import { blogPosts } from "@/data/blog";
 import { hacks } from "@/data/hacks";
 import { absoluteUrl } from "@/lib/seo";
 
-const lastModified = new Date("2026-05-04");
+const lastModified = "2026-05-04";
 
 const staticPages = [
   { path: "/", priority: 1 },
