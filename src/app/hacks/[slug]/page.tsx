@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
 import StateMap from "@/components/StateMap";
 import { hacks } from "@/data/hacks";
+import { pageSeo } from "@/lib/seo";
 
 const categoryGuidance: Record<string, string[]> = {
   "Emergency Help": [
@@ -40,6 +41,75 @@ const categoryGuidance: Record<string, string[]> = {
   ],
 };
 
+function getHackActionPhrase(title: string) {
+  const actionStarters = ["Apply", "Find", "Call", "Use", "Stack", "Buy", "Check", "Negotiate", "Switch", "Sell"];
+  return actionStarters.some((starter) => title.startsWith(starter)) ? title : `Use ${title}`;
+}
+
+function getHackKeywordTitle(title: string, category: string) {
+  return `How to ${getHackActionPhrase(title)}: ${category} Guide`;
+}
+
+function getHackMetaDescription(title: string, summary: string, category: string) {
+  return `Learn how to ${getHackActionPhrase(title).toLowerCase()} with step-by-step instructions, eligibility tips, FAQs, and related ${category.toLowerCase()} resources. ${summary}`;
+}
+
+function getIntroParagraphs(title: string, summary: string, category: string, timeToStart: string, estimatedBenefit: string) {
+  return [
+    `${title} can be a useful money-saving move when you need a clear next step instead of another vague tip. This guide explains how to approach it, what to prepare, what details to verify, and how to decide whether the option fits your household. The core idea is simple: ${summary.toLowerCase()} That can be helpful, but it still needs to be checked against your location, timing, budget, documents, provider rules, and personal needs.`,
+    `Use this ${category.toLowerCase()} page as a practical planning guide. The estimated time to start is ${timeToStart}, and the possible benefit is ${estimatedBenefit.toLowerCase()}, but your result can vary. Before relying on any savings idea, assistance program, discount, rebate, side hustle, or budget tool, confirm the current terms with the official provider. Keep notes as you go so you can track calls, application dates, receipts, confirmation numbers, deadlines, and follow-up steps. A little structure can turn this from an interesting idea into an action you can actually finish.`,
+  ];
+}
+
+function getEligibilityTips(title: string, category: string) {
+  const categoryTip =
+    category === "Emergency Help"
+      ? "Eligibility may depend on household income, current hardship, location, documentation, program funding, and how urgent the need is."
+      : category === "Food & Grocery Savings"
+        ? "Eligibility or usefulness may depend on household size, dietary needs, store access, pantry rules, coupon policies, transportation, and storage space."
+        : category === "Utility Bill Help"
+          ? "Eligibility may depend on income, account status, utility type, shutoff risk, seasonal application windows, and available state or local funding."
+          : category === "Rent & Housing Help"
+            ? "Eligibility may depend on lease status, landlord documentation, income, local funding, court deadlines, hardship rules, and county or city boundaries."
+            : category === "Cashback & Rewards"
+              ? "Eligibility may depend on store participation, offer terms, purchase category, payout thresholds, account status, receipt timing, and excluded items."
+              : category === "Side Hustles"
+                ? "Eligibility or fit may depend on your skills, equipment, transportation, schedule, platform rules, local demand, taxes, and startup costs."
+                : "Eligibility or usefulness may depend on your location, account terms, timing, provider rules, household needs, and whether the action saves more than it costs.";
+
+  return [
+    `${title} is not automatically the right move for everyone. ${categoryTip} Read the official rules or provider terms before applying, signing up, buying anything, or sharing sensitive information.`,
+    "If the page involves an application or local program, gather ID, proof of address, income details, account numbers, bills, receipts, notices, or other likely documents before starting. If it involves savings or income, write down the expected benefit and compare it with the time, fees, transportation, taxes, and effort required.",
+    "A good rule is to stop if the process asks for unnecessary fees, makes guaranteed promises, pressures you to act immediately, or does not clearly explain who controls the offer or program.",
+  ];
+}
+
+function getFaqs(title: string, category: string, timeToStart: string, estimatedBenefit: string, warning: string) {
+  return [
+    {
+      question: `What is ${title} best for?`,
+      answer: `${title} is best for readers looking for a practical ${category.toLowerCase()} starting point. It can help you organize the next step, compare the possible value, and avoid acting on a tip before checking the rules.`,
+    },
+    {
+      question: `How long does ${title} take to start?`,
+      answer: `The estimated time to start is ${timeToStart}. Some readers can complete the first step faster, while applications, provider calls, account reviews, document gathering, or marketplace listings may take longer.`,
+    },
+    {
+      question: `What benefit should I expect?`,
+      answer: `The possible benefit is ${estimatedBenefit.toLowerCase()}, but results are not guaranteed. Your outcome can depend on eligibility, timing, local availability, account terms, pricing, demand, fees, and follow-up.`,
+    },
+    {
+      question: "What should I verify before acting?",
+      answer: warning,
+    },
+    {
+      question: "What should I do after the first step?",
+      answer:
+        "Save any confirmation details, set a follow-up reminder, and compare the result with the time and cost involved. If the option does not fit, use one of the related money hack pages to choose a better next action.",
+    },
+  ];
+}
+
 type HackDetailPageProps = {
   params: Promise<{
     slug: string;
@@ -62,15 +132,20 @@ export async function generateMetadata({ params }: HackDetailPageProps): Promise
     };
   }
 
-  return {
-    title: hack.title,
-    description: hack.summary,
-    openGraph: {
-      title: `${hack.title} | Money Hack Database`,
-      description: hack.summary,
-      type: "article",
-    },
-  };
+  return pageSeo({
+    title: `${hack.title} Guide for ${hack.category}`,
+    description: getHackMetaDescription(hack.title, hack.summary, hack.category),
+    keywords: [
+      hack.title.toLowerCase(),
+      hack.category.toLowerCase(),
+      "money hack",
+      "budget help",
+      "save money",
+      "financial assistance",
+    ],
+    path: `/hacks/${hack.slug}`,
+    type: "article",
+  });
 }
 
 export default async function HackDetailPage({ params }: HackDetailPageProps) {
@@ -81,8 +156,20 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
     notFound();
   }
 
-  const relatedHacks = hacks.filter((item) => item.category === hack.category && item.id !== hack.id).slice(0, 3);
+  const relatedHacks = [
+    ...hacks.filter((item) => item.category === hack.category && item.id !== hack.id),
+    ...hacks.filter((item) => item.category !== hack.category && item.id !== hack.id),
+  ].slice(0, 3);
   const guidance = categoryGuidance[hack.category] ?? [];
+  const introParagraphs = getIntroParagraphs(
+    hack.title,
+    hack.summary,
+    hack.category,
+    hack.timeToStart,
+    hack.estimatedBenefit,
+  );
+  const eligibilityTips = getEligibilityTips(hack.title, hack.category);
+  const faqs = getFaqs(hack.title, hack.category, hack.timeToStart, hack.estimatedBenefit, hack.warning);
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -102,8 +189,14 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
             <span className="rounded-full bg-leaf px-3 py-1 text-moss">{hack.difficulty}</span>
           </div>
 
-          <h1 className="mt-5 text-4xl font-black tracking-tight text-ink sm:text-5xl">{hack.title}</h1>
-          <p className="mt-5 text-lg leading-8 text-ink/75">{hack.summary}</p>
+          <h1 className="mt-5 text-4xl font-black tracking-tight text-ink sm:text-5xl">
+            {getHackKeywordTitle(hack.title, hack.category)}
+          </h1>
+          <div className="mt-5 space-y-4 text-lg leading-8 text-ink/75">
+            {introParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
 
           <dl className="mt-6 grid gap-4 rounded-3xl bg-cream p-5 sm:grid-cols-2">
             <div>
@@ -117,17 +210,30 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
           </dl>
 
           <section className="mt-8">
-            <h2 className="text-3xl font-black text-ink">Step-by-step checklist</h2>
-            <ol className="mt-5 grid gap-4">
+            <p className="font-black uppercase tracking-wide text-moss">Step-by-step instructions</p>
+            <div className="mt-5 grid gap-5">
               {hack.steps.map((step, index) => (
-                <li key={step} className="flex gap-4 rounded-3xl border border-ink/10 bg-cream p-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-moss font-black text-white">
-                    {index + 1}
-                  </span>
-                  <span className="pt-1 leading-7 text-ink/75">{step}</span>
-                </li>
+                <section key={step} className="rounded-3xl border border-ink/10 bg-cream p-5">
+                  <h2 className="text-2xl font-black text-ink">
+                    Step {index + 1}: {step}
+                  </h2>
+                  <p className="mt-3 leading-8 text-ink/75">
+                    Start here and keep the action specific. Write down what you did, where you found the information,
+                    and what follow-up is needed. If this step involves an application, account, provider, purchase,
+                    sale, or local program, use the official source and save any confirmation details before moving on.
+                  </p>
+                </section>
               ))}
-            </ol>
+            </div>
+          </section>
+
+          <section className="mt-8">
+            <h2 className="text-3xl font-black text-ink">Eligibility details and practical tips</h2>
+            <div className="mt-4 space-y-4 leading-8 text-ink/75">
+              {eligibilityTips.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
           </section>
 
           <section className="mt-8">
@@ -205,6 +311,36 @@ export default async function HackDetailPage({ params }: HackDetailPageProps) {
                 request, rebate, or sale listing matters to your budget, set a reminder before you close the page. A
                 follow-up call or email can be the difference between a useful result and a forgotten attempt.
               </p>
+            </div>
+          </section>
+
+          {relatedHacks.length ? (
+            <section className="mt-8 rounded-3xl border border-ink/10 bg-cream p-5">
+              <h2 className="text-3xl font-black text-ink">Related money hacks to try next</h2>
+              <div className="mt-4 grid gap-3">
+                {relatedHacks.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/hacks/${item.slug}`}
+                    className="rounded-2xl bg-white p-4 transition hover:bg-leaf"
+                  >
+                    <span className="font-black text-moss">{item.title}</span>
+                    <span className="mt-1 block leading-7 text-ink/70">{item.summary}</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="mt-8">
+            <h2 className="text-3xl font-black text-ink">Frequently asked questions</h2>
+            <div className="mt-5 grid gap-4">
+              {faqs.map((faq) => (
+                <section key={faq.question} className="rounded-3xl border border-ink/10 bg-white p-5 shadow-sm">
+                  <h3 className="text-xl font-black text-ink">{faq.question}</h3>
+                  <p className="mt-2 leading-8 text-ink/75">{faq.answer}</p>
+                </section>
+              ))}
             </div>
           </section>
 
